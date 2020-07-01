@@ -30,6 +30,7 @@ func init() {
 		invoiced     bool
 		sessionID    int
 		sessionIDs   []int
+		decimal      bool
 	)
 
 	sessionCmd := &cobra.Command{
@@ -42,9 +43,9 @@ func init() {
 		Use:     "start",
 		Aliases: []string{"s", "time"},
 		Short:   `Starts a session timing against a project`,
-		Example: `mytime session start "projectCode" "notes" - Starts timing using the default category code
-mytime session start "projectCode" "notes" --category "categoryCode" - Starts timing using a specific category code
-mytime session start "projectCode" "notes" --interactive - Starts timing and displays a time, waiting for you to press Q to stop`,
+		Example: `mt session start "projectCode" "notes" - Starts timing using the default category code
+mt session start "projectCode" "notes" --category "categoryCode" - Starts timing using a specific category code
+mt session start "projectCode" "notes" --interactive - Starts timing and displays a time, waiting for you to press Q to stop`,
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 2 {
 				return fmt.Errorf("Please provide the project code to start timing for, and a small note describing this session")
@@ -211,7 +212,7 @@ mytime session start "projectCode" "notes" --interactive - Starts timing and dis
 		Use:     "stop",
 		Aliases: []string{"st"},
 		Short:   "Stops an active timing session",
-		Example: `mytime session stop`,
+		Example: `mt session stop`,
 		Run: func(cmd *cobra.Command, args []string) {
 			var (
 				err           error
@@ -253,7 +254,7 @@ mytime session start "projectCode" "notes" --interactive - Starts timing and dis
 	sessionStatusCmd := &cobra.Command{
 		Use:     "status",
 		Short:   `Display the status of a current session`,
-		Example: `mytime session status`,
+		Example: `mt session status`,
 		Run: func(cmd *cobra.Command, args []string) {
 			var (
 				err      error
@@ -294,22 +295,33 @@ mytime session start "projectCode" "notes" --interactive - Starts timing and dis
 		Use:     "close",
 		Aliases: []string{"c"},
 		Short:   `Closes a session, marking it as invoiced and paid today (useful for time entries that really aren't invoiced)`,
-		Example: `mytime session close "projectcode" 1. In this example the '1' is the ID of the session to remove.`,
+		Example: `mt session close 1. In this example the '1' is the ID of the session to close.`,
 		Args: func(cmd *cobra.Command, args []string) error {
 			var err error
 
-			if len(args) < 2 {
-				return fmt.Errorf("Please provide the project code and session ID")
+			if len(args) < 1 {
+				return fmt.Errorf("Please provide the session ID to close")
 			}
 
-			if _, err = strconv.Atoi(args[1]); err != nil {
+			if _, err = strconv.Atoi(args[0]); err != nil {
 				return fmt.Errorf("Please provide a numeric ID for the session ID")
 			}
 
 			return nil
 		},
 		Run: func(cmd *cobra.Command, args []string) {
+			var (
+				err       error
+				sessionID int
+			)
 
+			sessionID, _ = strconv.Atoi(args[0])
+
+			if err = sessionService.CloseSession(sessionID); err != nil {
+				displayError(err.Error())
+			}
+
+			fmt.Printf("Session ID %s closed\n", Green(sessionID))
 		},
 	}
 
@@ -317,14 +329,15 @@ mytime session start "projectCode" "notes" --interactive - Starts timing and dis
 		Use:     "report",
 		Aliases: []string{"r", "reports"},
 		Short:   `Report on sessions`,
-		Example: `mytime session report
-mytime session report --category "categoryCode"
-mytime session report --client "clientCode"
-mytime session report --project "projectCode"
-mytime session report --paid
-mytime session report --invoiced
-mytime session report --id 2
-mytime session report --ids 2,54,3`,
+		Example: `mt session report
+mt session report --category "categoryCode"
+mt session report --client "clientCode"
+mt session report --project "projectCode"
+mt session report --paid
+mt session report --invoiced
+mt session report --id 2
+mt session report --ids 2,54,3
+mt session report --decimal`,
 		Run: func(cmd *cobra.Command, args []string) {
 			var err error
 			var result sessions.SessionCollection
@@ -361,6 +374,8 @@ mytime session report --ids 2,54,3`,
 			)
 
 			for _, s := range result {
+				var duration string
+
 				c, _ := clientService.GetClientByID(s.ClientID)
 				p, _ := projectService.GetProjectByID(s.ProjectID)
 				cat, _ := categoryService.GetCategoryByID(s.CategoryID)
@@ -371,7 +386,12 @@ mytime session report --ids 2,54,3`,
 
 				diff := s.EndDateTime.Sub(s.StartDateTime)
 				t := fmt.Sprintf("%s - %s", startTime, endTime)
-				duration := time.Time{}.Add(diff).Format("15:04:05")
+
+				if decimal {
+					duration = strconv.FormatFloat(diff.Hours(), 'G', 2, 64)
+				} else {
+					duration = time.Time{}.Add(diff).Format("15:04:05")
+				}
 
 				invoiced := ""
 				paid := ""
@@ -402,6 +422,7 @@ mytime session report --ids 2,54,3`,
 	sessionReportCmd.Flags().BoolVarP(&invoiced, "invoiced", "i", false, "Filter sessions for those that are invoiced")
 	sessionReportCmd.Flags().IntVarP(&sessionID, "id", "", 0, "Filter sessions by ID")
 	sessionReportCmd.Flags().IntSliceVarP(&sessionIDs, "ids", "", []int{}, "Filter sessions by a list of IDs")
+	sessionReportCmd.Flags().BoolVarP(&decimal, "decimal", "d", false, "Show session duration in decimal format")
 
 	sessionCmd.AddCommand(startSessionCmd, stopSessionCmd, sessionStatusCmd, sessionCloseCmd, sessionReportCmd)
 	rootCmd.AddCommand(sessionCmd)
