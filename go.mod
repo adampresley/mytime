@@ -3,7 +3,7 @@ module github.com/adampresley/mytime
 go 1.14
 
 require (
-	github.com/adampresley/simdb v1.0.3
+	github.com/adampresley/simdb v1.0.5
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/eiannone/keyboard v0.0.0-20200508000154-caf4b762e807
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
@@ -13,7 +13,7 @@ require (
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/pelletier/go-toml v1.8.0 // indirect
 	github.com/sonyarouje/simdb v0.0.0-20181202125413-c2488dfc374a
-	github.com/spf13/afero v1.3.0
+	github.com/spf13/afero v1.3.1
 	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect

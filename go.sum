@@ -24,6 +24,10 @@ github.com/adampresley/simdb v1.0.2 h1:NXOV2ryjHgUBhDgMd5SkoQnC0BZXZ2BQ8gmqDhIdi
 github.com/adampresley/simdb v1.0.2/go.mod h1:KHsQD9AA9o4EZaHfxLzNWz/fMRCoTtnbYNDnP85r5aA=
 github.com/adampresley/simdb v1.0.3 h1:s3b8Z3ZjSfYSC5V6od+suEbvGiDxPGZ1r9SYr7Wu3r8=
 github.com/adampresley/simdb v1.0.3/go.mod h1:KHsQD9AA9o4EZaHfxLzNWz/fMRCoTtnbYNDnP85r5aA=
+github.com/adampresley/simdb v1.0.4 h1:+YAFHK6T4AXT/NwPnDRsYKkpt45RHAh8czMEupUJUwM=
+github.com/adampresley/simdb v1.0.4/go.mod h1:KHsQD9AA9o4EZaHfxLzNWz/fMRCoTtnbYNDnP85r5aA=
+github.com/adampresley/simdb v1.0.5 h1:X81HHa6K8KBCpvTrSsMEE313LQ3n2Ivmwja9DE6yJXw=
+github.com/adampresley/simdb v1.0.5/go.mod h1:KHsQD9AA9o4EZaHfxLzNWz/fMRCoTtnbYNDnP85r5aA=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
 github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e/go.mod h1:3U/XgcO3hCbHZ8TKRvWD2dDTCfh9M9ya+I9JpbB7O8o=
@@ -195,6 +199,8 @@ github.com/spaolacci/murmur3 v0.0.0-20180118202830-f09979ecbc72/go.mod h1:JwIasO
 github.com/spf13/afero v1.1.2/go.mod h1:j4pytiNVoe2o6bmDsKpLACNPDBIoEAkihy7loJ1B0CQ=
 github.com/spf13/afero v1.3.0 h1:Ysnmjh1Di8EaWaBv40CYR4IdaIsBc5996Gh1oZzCBKk=
 github.com/spf13/afero v1.3.0/go.mod h1:5KUK8ByomD5Ti5Artl0RtHeI5pTF7MIDuXL3yY520V4=
+github.com/spf13/afero v1.3.1 h1:GPTpEAuNr98px18yNQ66JllNil98wfRZ/5Ukny8FeQA=
+github.com/spf13/afero v1.3.1/go.mod h1:5KUK8ByomD5Ti5Artl0RtHeI5pTF7MIDuXL3yY520V4=
 github.com/spf13/cast v1.3.0 h1:oget//CVOEoFewqQxwr0Ej5yjygnqGkvggSE/gB35Q8=
 github.com/spf13/cast v1.3.0/go.mod h1:Qx5cxh0v+4UWYiBimWS+eyWzqEqokIECu5etghLkUJE=
 github.com/spf13/cast v1.3.1 h1:nFm6S0SMdyzrzcmThSipiEubIDy8WEXKNZ0UOgiRpng=
