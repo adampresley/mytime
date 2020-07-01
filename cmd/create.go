@@ -24,7 +24,7 @@ func init() {
 		Use:     "client",
 		Aliases: []string{"c"},
 		Short:   `Creates a new client`,
-		Example: `mytime create client "Client A" "clientcode"`,
+		Example: `mt create client "Client A" "clientcode"`,
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 2 {
 				return fmt.Errorf("Please provide a name and code for this client!")
@@ -60,7 +60,7 @@ func init() {
 		Use:     "category",
 		Aliases: []string{"cat"},
 		Short:   `Creates a new category. `,
-		Example: `mytime create category "Development" "dev" 50.00`,
+		Example: `mt create category "Development" "dev" 50.00`,
 		Args: func(cmd *cobra.Command, args []string) error {
 			var err error
 
@@ -106,7 +106,7 @@ func init() {
 		Aliases: []string{"p", "proj"},
 		Short:   `Create a new project.`,
 		Long:    `Creates a new project. Projects are tied to clients, and are what time is tracked against.`,
-		Example: `mytime create project "Name" "code" "clientCode" "defaultCategoryCode"`,
+		Example: `mt create project "Name" "code" "clientCode" "defaultCategoryCode"`,
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 4 {
 				return fmt.Errorf("Please provide a name, code, client code, and default category code for your new project!")

@@ -28,7 +28,10 @@ func init() {
 	listClientsCmd := &cobra.Command{
 		Use:     "clients",
 		Aliases: []string{"c", "client"},
-		Short:   `Lists all clients. E.g. mytime list clients.`,
+		Short:   `Lists all clients`,
+		Example: `mt list clients
+mt list clients --archived
+mt list clients --name "client name"`,
 		Run: func(cmd *cobra.Command, args []string) {
 			var err error
 			var result clients.ClientCollection
@@ -67,17 +70,19 @@ func init() {
 		Use:     "categories",
 		Aliases: []string{"cat", "category"},
 		Short:   `Lists all categories.`,
-		Example: `mytime list categories
-mytime list categories --archived`,
+		Example: `mt list categories
+mt list categories --archived
+mt list categories --name "category name"`,
 		Run: func(cmd *cobra.Command, args []string) {
 			var err error
 			var result categories.CategoryCollection
 
 			tableData := make([][]string, 5)
 
-			search := categories.CategorySearch{}
-			search.Archived = archived
-			search.Name = name
+			search := categories.CategorySearch{
+				Archived: archived,
+				Name:     name,
+			}
 
 			if result, err = categoryService.ListCategories(search); err != nil {
 				displayError(fmt.Sprintf("Error listing categories: %s", err.Error()))
@@ -107,10 +112,10 @@ mytime list categories --archived`,
 		Use:     "projects",
 		Aliases: []string{"p", "project", "proj"},
 		Short:   `Lists projects.`,
-		Example: `mytime list projects 
-mytime list projects --archived
-mytime list projects --name "value"
-mytime list projects --client "client"`,
+		Example: `mt list projects 
+mt list projects --archived
+mt list projects --name "value"
+mt list projects --client "client"`,
 		Run: func(cmd *cobra.Command, args []string) {
 			var err error
 			var result projects.ProjectCollection
@@ -151,13 +156,13 @@ mytime list projects --client "client"`,
 		},
 	}
 
-	listClientsCmd.Flags().BoolVarP(&archived, "archived", "a", false, `Show archived clients. E.g. mytime list clients --archived`)
-	listClientsCmd.Flags().StringVarP(&name, "name", "n", "", `Filter clients by name or code. E.g. mytime list clients --name "client"`)
-	listCategoriesCmd.Flags().BoolVarP(&archived, "archived", "a", false, `Show archived categories. E.g. mytime list categories --archived`)
-	listCategoriesCmd.Flags().StringVarP(&name, "name", "n", "", `Filter categories by name or code. E.g. mytime list categories --name "test"`)
-	listProjectsCmd.Flags().BoolVarP(&archived, "archived", "a", false, `Show archived projects. E.g. mytime list projects --archived`)
-	listProjectsCmd.Flags().StringVarP(&name, "name", "n", "", `Filter projects by name or code. E.g. mytime list projects --name "test"`)
-	listProjectsCmd.Flags().StringVarP(&client, "client", "c", "", `Filter projects by client name or code. E.g. mytime list projects --client "client"`)
+	listClientsCmd.Flags().BoolVarP(&archived, "archived", "a", false, `Show archived clients. E.g. mt list clients --archived`)
+	listClientsCmd.Flags().StringVarP(&name, "name", "n", "", `Filter clients by name or code. E.g. mt list clients --name "client"`)
+	listCategoriesCmd.Flags().BoolVarP(&archived, "archived", "a", false, `Show archived categories. E.g. mt list categories --archived`)
+	listCategoriesCmd.Flags().StringVarP(&name, "name", "n", "", `Filter categories by name or code. E.g. mt list categories --name "test"`)
+	listProjectsCmd.Flags().BoolVarP(&archived, "archived", "a", false, `Show archived projects. E.g. mt list projects --archived`)
+	listProjectsCmd.Flags().StringVarP(&name, "name", "n", "", `Filter projects by name or code. E.g. mt list projects --name "test"`)
+	listProjectsCmd.Flags().StringVarP(&client, "client", "c", "", `Filter projects by client name or code. E.g. mt list projects --client "client"`)
 
 	listCmd.AddCommand(listClientsCmd, listCategoriesCmd, listProjectsCmd)
 	rootCmd.AddCommand(listCmd)

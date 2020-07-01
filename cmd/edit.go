@@ -31,7 +31,7 @@ func init() {
 		Use:     "client",
 		Aliases: []string{"c"},
 		Short:   `Edit a client record`,
-		Example: `mytime edit client "test" --name "New Name" --code "New Code"`,
+		Example: `mt edit client "test" --name "New Name" --code "New Code"`,
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 1 {
 				return fmt.Errorf("Please provide the code for the client you wish to edit")
@@ -80,7 +80,7 @@ func init() {
 		Use:     "category",
 		Aliases: []string{"cat"},
 		Short:   `Edit a category record`,
-		Example: `mytime edit category "test" --name "New Name" --code "New Code" --rate 10.00`,
+		Example: `mt edit category "test" --name "New Name" --code "New Code" --rate 10.00`,
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 1 {
 				return fmt.Errorf("Please provide the code for the category you wish to edit")
@@ -133,7 +133,7 @@ func init() {
 		Use:     "project",
 		Aliases: []string{"projects", "proj", "p"},
 		Short:   `Edit a project record`,
-		Example: `mytime edit project "test" --name "New Name" --code "New Code" --client "New client" --category "New default category"`,
+		Example: `mt edit project "test" --name "New Name" --code "New Code" --client "New client" --category "New default category"`,
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 1 {
 				return fmt.Errorf("Please provide the code for the project you wish to edit")

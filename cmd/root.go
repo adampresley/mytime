@@ -26,7 +26,7 @@ var (
 	configFile string
 
 	rootCmd = &cobra.Command{
-		Use:   "mytime",
+		Use:   "mt",
 		Short: "Time tracking, invoicing, and reporting!",
 	}
 
