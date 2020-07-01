@@ -1,0 +1,11 @@
+# Executables
+mytime
+mt
+mt.exe
+
+# IDE/Temp Files/OS
+*.swp
+.vscode
+.idea
+.DS_Store
+
