@@ -2,6 +2,8 @@
 
 My Time is a command-line time tracking, reporting, and invoicing tool. It was built with similar functionality to [Watson](https://tailordev.github.io/Watson/), with additions to match what I liked about the excellent [Office Time](https://www.officetime.net) for Mac. My Time provides the ability to create clients with projects, and categories to describe the type and dollar amount for each timing session. Sessions are simply durations of tracked time. Once you've actually invoiced a client using your 3rd party tool of choice, My Time allows you to mark sessions as invoiced, leting you keep track of which entries are awaiting invoicing or awaiting payment. Once your client pays your invoice My Time then allows you to mark sessions as paid. Using the reporting mechanism of My Time you can keep track of how much time is spent on projects, which time sessions need to be billed, and which ones finally paid.
 
+![Screenshot](screenshot.png)
+
 ## License
 
 Copyright 2020 Adam Presley 
