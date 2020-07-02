@@ -18,6 +18,8 @@ type SessionServicer interface {
 	HasActiveSession() (bool, error)
 	GetActiveSession() (ActiveSession, error)
 	GetSessionByID(sessionID int) (Session, error)
+	InvoiceSessions(sessionIDs []int) []error
+	InvoiceSession(sessionID int) error
 	ListSessions(search SessionSearch) (SessionCollection, error)
 	StartActiveSession(projectID, categoryID, clientID int, notes string) (ActiveSession, time.Time, error)
 }
@@ -140,6 +142,44 @@ func (s SessionService) HasActiveSession() (bool, error) {
 	}
 
 	return len(sessions) > 0, nil
+}
+
+func (s SessionService) InvoiceSessions(sessionIDs []int) []error {
+	result := make([]error, len(sessionIDs))
+
+	for index, sessionID := range sessionIDs {
+		err := s.InvoiceSession(sessionID)
+
+		if err != nil {
+			result[index] = fmt.Errorf("Session ID: %d - %w", sessionID, err)
+		} else {
+			result[index] = err
+		}
+	}
+
+	return result
+}
+
+func (s SessionService) InvoiceSession(sessionID int) error {
+	var err error
+	var session Session
+
+	if session, err = s.GetSessionByID(sessionID); err != nil {
+		return err
+	}
+
+	if session.Invoiced {
+		return fmt.Errorf("Session already invoiced")
+	}
+
+	if session.Paid {
+		return fmt.Errorf("Cannot invoice a session that is already paid")
+	}
+
+	session.Invoiced = true
+	session.InvoiceDate = time.Now()
+
+	return s.UpdateSession(session)
 }
 
 func (s SessionService) ListSessions(search SessionSearch) (SessionCollection, error) {
@@ -274,4 +314,8 @@ func (s SessionService) StartActiveSession(projectID, categoryID, clientID int, 
 	}
 
 	return session, startTime, nil
+}
+
+func (s SessionService) UpdateSession(session Session) error {
+	return s.DB.Open(Session{}).Update(session)
 }

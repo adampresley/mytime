@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -327,7 +328,7 @@ mt session start "projectCode" "notes" --interactive - Starts timing and display
 
 	sessionReportCmd := &cobra.Command{
 		Use:     "report",
-		Aliases: []string{"r", "reports"},
+		Aliases: []string{"r", "reports", "ls"},
 		Short:   `Report on sessions`,
 		Example: `mt session report
 mt session report --category "categoryCode"
@@ -413,6 +414,59 @@ mt session report --decimal`,
 		},
 	}
 
+	sessionInvoiceCmd := &cobra.Command{
+		Use:     "invoice",
+		Aliases: []string{"i"},
+		Short:   `Marks sessions as invoiced`,
+		Example: `mt sessions invoice 1,4,5`,
+		Args: func(cmd *cobra.Command, args []string) error {
+			var err error
+
+			if len(args) < 1 {
+				return fmt.Errorf("Please provide a comma-delimited list of session IDs")
+			}
+
+			s := strings.Split(args[0], ",")
+
+			for _, t := range s {
+				if _, err = strconv.Atoi(t); err != nil {
+					return fmt.Errorf("The list of session IDs must be numeric, and comma separated")
+				}
+			}
+
+			return nil
+		},
+		Run: func(cmd *cobra.Command, args []string) {
+			var invoicingErrors []error
+
+			split := strings.Split(args[0], ",")
+			ids := make([]int, len(split))
+
+			for index, value := range split {
+				intValue, _ := strconv.Atoi(value)
+				ids[index] = intValue
+			}
+
+			invoicingErrors = sessionService.InvoiceSessions(ids)
+			errorCount := 0
+
+			for _, e := range invoicingErrors {
+				if e != nil {
+					errorCount++
+					fmt.Printf("%s: %s\n", Red("ERROR"), e.Error())
+				}
+			}
+
+			if errorCount > 0 && errorCount < len(ids) {
+				fmt.Printf("Some sessions were invoiced, but there were %s errors\n", Cyan(errorCount))
+			} else if errorCount == len(ids) {
+				fmt.Printf("No sessions were invoiced.\n")
+			} else {
+				fmt.Printf("Sessions invoiced successfully!\n")
+			}
+		},
+	}
+
 	startSessionCmd.Flags().BoolVarP(&interactive, "interactive", "i", false, "Starts a timing session in interactive mode")
 	startSessionCmd.Flags().StringVarP(&categoryCode, "category", "c", "", "Category to use in this timing session")
 	sessionReportCmd.Flags().StringVarP(&categoryCode, "category", "a", "", "Filter sessions by category code")
@@ -424,6 +478,6 @@ mt session report --decimal`,
 	sessionReportCmd.Flags().IntSliceVarP(&sessionIDs, "ids", "", []int{}, "Filter sessions by a list of IDs")
 	sessionReportCmd.Flags().BoolVarP(&decimal, "decimal", "d", false, "Show session duration in decimal format")
 
-	sessionCmd.AddCommand(startSessionCmd, stopSessionCmd, sessionStatusCmd, sessionCloseCmd, sessionReportCmd)
+	sessionCmd.AddCommand(startSessionCmd, stopSessionCmd, sessionStatusCmd, sessionCloseCmd, sessionReportCmd, sessionInvoiceCmd)
 	rootCmd.AddCommand(sessionCmd)
 }
