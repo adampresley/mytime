@@ -4,6 +4,68 @@ My Time is a command-line time tracking, reporting, and invoicing tool. It was b
 
 ![Screenshot](screenshot.png)
 
+## Getting Started
+
+The first step in using My Time is to setup clients, categories, and projects. A **client** represents someone you are doing work for. This could be a business, individual, or even yourself. A **category** is a way to organize sessions, which are time entries. Categories have a dollar amount attached to them. Sessions are grouped up under **projects**, which are tied to a client. Let's start by making a client.
+
+```bash
+$ mt create client "First Client" client
+```
+
+![Create Client Screenshot](screenshots/create-client.png)
+
+The above command will create a client named **First Client** which has a code of *client*. Codes in My Time are short-hand ways to reference data such as clients, projects, and categories. Now, let's create some categories. Let's say you are a developer who charges different rates for server maintenance vs writing code. Based on that we'll create two categories.
+
+```bash
+$ mt create category "Development" dev 50.00
+$ mt create category "Server Maintenance" devops 25.00
+```
+
+![Create Categories Screenshot](screenshots/create-category.png)
+
+Now, let's say you have a new project to write an application for your **First Client**. Let's make a project where the default category is **Development**, and has a code of *first*.
+
+```bash
+$ mt create project "First Project" first client dev
+```
+
+![Create Project Screenshot](screenshots/create-project.png)
+
+The above created a project named "First Project", with a code of "first", related to the client "First Client", and has a default category of "Development".
+
+Cool, so now it is time to do some work. You will want to start a timing **session**. This is simple.
+
+```bash
+$ mt session start first "Started writing code"
+```
+
+![First Session Screenshot](screenshots/session1.png)
+
+The above command will start timing against the project "First Project", and will attach a note "Started writing code". Since you didn't provide a category the default category for this project is used, which is "Development". Now let's say that done, and it's time to setup a server. First, you'll want to stop timing your current session, then start a new one.
+
+```bash
+$ mt session stop
+$ mt session start first "Setting up the server" --category devops
+```
+
+![Stop Session Screenshot](screenshots/stop1.png)
+
+![Second Session Screenshot](screenshots/session2.png)
+
+Now we'll be timing using the "Server Maintenance" category.
+
+Next let's stop timing that, and take a look at what time we've recorded.
+
+```bash
+$ mt session stop
+$ mt session report
+```
+
+![Stop Session Screenshot](screenshots/stop2.png)
+
+![Report Screenshot](screenshots/report1.png)
+
+
 ## License
 
 Copyright 2020 Adam Presley 
